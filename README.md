@@ -1,26 +1,17 @@
-Nazev projektu: "Kartograficke vypocty a jejich zobrazeni ve webove aplikaci".  
+# I - webová aplikace na kartografické výpočty
 
-Cil projektu: 
-1. Vytvorit webovou aplikaci obsahujici kartograficke vypocty, jejich zobrazeni na mape a na 3d modelu.  
-2. Kartograficke vypocty: ortodroma, loxodroma, propojeni nekolika bodu, zobrazeni bodu ze souradnic, ...   
+## Seznam členů
 
-Vstup: preddefinovane souradnice bodu (velkych mest), moznost zadat svoje souradnice (ve tvaru sirka delka) . 
+- Maiia Liashenko (cinnamon-roll1)
+- Pavel Terš (dršťková)
+- Kristýna Svobodová (Svobodovakris)
 
-Zobrazeni na mape: propojeni s mapou Leaflet (Web Mercator), moznost zvolit ruzny podklad (letecky snikmy, topograficka mapa).
+## Zadání
 
-Nastaveni: volba podkladove mapy (topologicka, letecke snimky).  
+Projekt se zabývá tvorbou webové aplikace pro kartografické výpočty a jejich vizualizaci na mapě i na glóbu. 
 
-Vystup: zobrazeni na mape "Leaflet", ulozeni charakteristik do txt souboru (to neni jisty).
-              
-Technologie: HTML CSS, JS, knihovna "Leaflet", ChatGPT
+Cíle: 
+- Vytvořit webovou aplikaci (jazyky HTML, CSS, JavaScript), která bude umět vypočítat základní kartografické výpočty (parametry loxodromy a ortodromy)a plochu polygonu ohraničeného křivkami. Dále by měla aplikace umožnit vhodnou metodu volby bodů (zvolit bod z mapy, z předvoleb, vložením souřadnic), případně body importovat či exportovat (v .txt)
+- Vypočtená data vhodně vizualizovat ve 2D i ve 3D. 2D vizualizace bude probíhat na podkladové mapě (OSM, satelitní mapa, tmavý režim), bude zde možno vizualizovat i vypočtený polygon. 3D vizualizace bude probíhat formou zobrazení glóbu, na kterém proběhne jednoduchá animace (například přelet letadla, přejezd auta). 
 
-Co je hotovo:
-1. Kostra webove aplikaci.
-2. Vypocet ortodormy - demo verze, zatim s pevnymi dva body.
-3. Zobrazeni ortodromy na mape "Leaflet".
-
-Co k dodelani:
-1. Fce na vypocet zbyvajicich uloh.
-2. Doladeni designu webove aplikaci.
-3. 3d animace
-4. Vyresit zda bude vystup v txt (jestli to neni zbytecny), 
+Aplikace by měla být následně vhodná i pro další úpravy - zejména možnost vložit další modely pro animaci na glóbu.
