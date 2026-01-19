@@ -15,3 +15,5 @@ Cíle:
 - Vypočtená data vhodně vizualizovat ve 2D i ve 3D. 2D vizualizace bude probíhat na podkladové mapě (OSM, satelitní mapa, tmavý režim), bude zde možno vizualizovat i vypočtený polygon. 3D vizualizace bude probíhat formou zobrazení glóbu, na kterém proběhne jednoduchá animace (například přelet letadla, přejezd auta). 
 
 Aplikace by měla být následně vhodná i pro další úpravy - zejména možnost vložit další modely pro animaci na glóbu.
+Musí se spoštět z lokálního serveru.
+Model letadla (pro 3D zobrazení) se nepodařílo nahrát z důvodu velikosti nad 25MB (konkrétně 31MB).
