@@ -1,34 +1,206 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8" />
-    <title>Projekt Inf</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style_hl.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <meta charset="UTF-8" />
+  <title>Projekt Inf – Geografické úlohy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="./style_hl.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+      "globe.gl": "https://cdn.jsdelivr.net/npm/globe.gl@2.33.1/+esm"
+    }
+  }
+  </script>
 </head>
 
 <body>
-    <h1>Projekt z Informatiky</h1>
-    <nav class="navbar">
-        <ul>
-            <li><a href="html_hl.html">Hlavní stránka</a></li>
-            <li><a href="#">Otevřít...</a></li>
-            <li><a href="html_zb.html">Bod ze souřadnic</a></li>
-            <li><a href="html_uloha.html">Zvolit úlohu</a></li>
-            <li><a href="html_nast.html">Nastavení</a></li>
-        </ul>
+  <header class="app-header">
+    <h1>Projekt z Informatiky – Geografické výpočty</h1>
+
+    <nav class="navbar" aria-label="Hlavní menu">
+      <ul>
+        <li><a href="#" data-panel="sec-name">Bod podle názvu</a></li>
+        <li><a href="#" data-panel="sec-coords">Bod ze souřadnic</a></li>
+        <li><a href="#" data-panel="sec-import">Import bodů</a></li>
+        <li><a href="#" data-panel="sec-export">Export bodů</a></li>
+        <li><a href="#" data-panel="sec-task">Zvolit úlohu</a></li>
+        <li><a href="#" data-panel="sec-settings">Nastavení</a></li>
+      </ul>
     </nav>
+  </header>
 
-    <main>
-        <!-- zobrazeni mapy -->
-        <div id="map"></div>
+  <div class="app-layout">
+    <!-- ================= LEFT PANEL ================= -->
+    <section class="panel" aria-label="Ovládací panel">
+      <!-- === BOD PODLE NÁZVU === -->
+      <div class="panel-section" id="sec-name">
+        <h3>Bod podle názvu</h3>
 
-        <!-- knihovna Leaflet -->
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <div class="row">
+          <input id="cityQuery" type="text" placeholder="Zadej město (např. Brno)" style="flex:1;" />
+          <button id="citySearchBtn" class="btn primary">Hledat</button>
+        </div>
 
-        <!-- vykresleni mapy a ortodromy -->
-        <script src="./demo.js"></script>
+        <div id="cityResults" class="stats"></div>
+
+        <hr />
+
+        <div class="row">
+          <label for="preset">Předdefinované město</label>
+          <select id="preset">
+            <option value="">— vyber —</option>
+            <option value="prague">Praha</option>
+            <option value="vienna">Vídeň</option>
+            <option value="london">Londýn</option>
+            <option value="paris">Paříž</option>
+            <option value="newyork">New York</option>
+            <option value="tokyo">Tokyo</option>
+          </select>
+          <button id="addPreset" class="btn primary">Přidat bod</button>
+        </div>
+      </div>
+
+      <!-- === BOD ZE SOUŘADNIC === -->
+      <div class="panel-section" id="sec-coords">
+        <h3>Bod ze souřadnic</h3>
+        <div class="row">
+          <input id="lat" type="number" step="0.000001" placeholder="Šířka (lat)" />
+          <input id="lon" type="number" step="0.000001" placeholder="Délka (lon)" />
+          <button id="addCustom" class="btn primary">Přidat bod</button>
+        </div>
+      </div>
+
+      <!-- === IMPORT === -->
+      <div class="panel-section" id="sec-import">
+        <h3>Import bodů (TXT)</h3>
+
+        <input type="file" id="fileInput" accept=".txt" />
+        <textarea id="txtImport" rows="8" style="width:100%;"></textarea>
+
+        <label class="checkline">
+          <input type="checkbox" id="appendImport" />
+          Přidat k existujícím bodům
+        </label>
+
+        <button id="importBtn" class="btn" type="button">Importovat</button>
+      </div>
+
+      <!-- === EXPORT === -->
+      <div class="panel-section" id="sec-export">
+        <h3>Export bodů</h3>
+
+        <div class="row">
+          <button id="exportPointsBtn" class="btn" type="button">Export: jen body</button>
+          <button id="exportDetailBtn" class="btn" type="button">Export: detail</button>
+          <button id="copyTxtBtn" class="btn" type="button">Kopírovat</button>
+        </div>
+        <textarea id="txtIO" rows="8" style="width:100%; margin-top:10px;"></textarea>
+      </div>
+
+      <!-- === ÚLOHA === -->
+      <div class="panel-section" id="sec-task">
+        <h3>Zvolit úlohu</h3>
+
+        <label for="routeType">Typ spojení</label>
+        <select id="routeType">
+          <option value="ortho">Ortodroma</option>
+          <option value="rhumb">Loxodroma</option>
+        </select>
+
+        <label class="checkline">
+          <input type="checkbox" id="calcPolygonArea" />
+          Počítat plochu polygonu
+        </label>
+
+        <hr />
+
+        <label for="viewMode">Režim zobrazení</label>
+        <select id="viewMode">
+          <option value="2D">2D mapa</option>
+          <option value="3D">3D glóbus</option>
+        </select>
+
+        <label for="actor">Dopravní prostředek</label>
+        <select id="actor">
+          <option value="plane">Letadlo</option>
+          <option value="car">Auto</option>
+          <option value="camel">Velbloud</option>
+          <option value="officer">Officer</option>
+        </select>
+
+        <div class="row">
+          <button id="startAnim" class="btn primary">Start</button>
+          <button id="resetAnim" class="btn">Reset</button>
+
+          <label style="margin-left:8px;" for="speed">Rychlost</label>
+          <input id="speed" type="range" min="0.2" max="3" step="0.1" value="1" />
+          <span id="speedVal" class="mono">1.0×</span>
+        </div>
+      </div>
+
+      <!-- === NASTAVENÍ === -->
+      <div class="panel-section" id="sec-settings">
+        <h3>Nastavení</h3>
+
+        <label class="checkline">
+          <input type="checkbox" id="connect" checked />
+          Propojovat body čarou
+        </label>
+
+        <label class="checkline">
+          <input type="checkbox" id="showPolygonDraw" />
+          Zobrazit polygon
+        </label>
+
+        <label class="checkline">
+          <input type="checkbox" id="showGrid" />
+          Zobrazit mřížku
+        </label>
+
+        <label class="checkline">
+          <input type="checkbox" id="darkMode" />
+          Tmavý režim
+        </label>
+
+        <label for="basemap">Podkladová mapa</label>
+        <select id="basemap">
+          <option value="osm">OSM</option>
+          <option value="sat">Satelit</option>
+          <option value="dark">Dark</option>
+        </select>
+
+        <hr />
+        <button id="clear" class="btn danger">Smazat všechny body</button>
+      </div>
+
+      <hr />
+
+      <h3>Body</h3>
+      <ol id="pointsList"></ol>
+      <div id="stats" class="stats"></div>
+    </section>
+
+    <!-- ================= MAP / GLOBE ================= -->
+    <main class="map-container" aria-label="Mapa">
+      <div id="map" class="view-layer"></div>
+      <div id="globe" class="view-layer hidden"></div>
     </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script src="./js/math.js"></script>
+  <script src="./js/curves.js"></script>
+  <script src="./js/geocode.js"></script>
+  <script src="./js/io.js"></script>
+
+  <script src="./js/app.js"></script>
+  <script type="module" src="./js/globe.js"></script>
 </body>
 </html>
